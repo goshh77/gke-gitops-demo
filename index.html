@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud Store</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f0f2f5; }
+        .container { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .product { border-bottom: 1px solid #eee; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        button { background: #1a73e8; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .cart { margin-top: 20px; background: #e8f0fe; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>☁️ My Cloud Store - CI/CD Pipeline harsha</h1>
+        <div id="products">Loading products...</div>
+        
+        <div class="cart">
+            <h3>🛒 Shopping Cart</h3>
+            <div id="cart-items">Empty</div>
+            <button onclick="clearCart()" style="background: #d93025; margin-top: 10px;">Clear Cart</button>
+        </div>
+    </div>
+
+    <script>
+        // BACKEND_URL_PLACEHOLDER will be replaced by our Frontend server
+        const API_URL = ""; 
+
+        async function loadData() {
+            const prodRes = await fetch(`${API_URL}/api/products`);
+            const prods = await prodRes.json();
+            document.getElementById('products').innerHTML = prods.map(p => `
+                <div class="product">
+                    <span>${p.name} - $${p.price}</span>
+                    <button onclick="addToCart('${p.name}', ${p.price})">Add</button>
+                </div>
+            `).join('');
+
+            const cartRes = await fetch(`${API_URL}/api/cart`);
+            const cart = await cartRes.json();
+            document.getElementById('cart-items').innerText = cart.length ? 
+                cart.map(i => i.name).join(', ') : "Empty";
+        }
+
+        async function addToCart(name, price) {
+            await fetch(`${API_URL}/api/cart`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name, price })
+            });
+            loadData();
+        }
+
+        async function clearCart() {
+            await fetch(`${API_URL}/api/cart`, { method: 'DELETE' });
+            loadData();
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
