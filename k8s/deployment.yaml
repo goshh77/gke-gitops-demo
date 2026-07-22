@@ -21,8 +21,8 @@ spec:
       containers:
         - name: my-app
 
-          image: us-central1-docker.pkg.dev/project-1-501612/demo/frontend:IMAGE_TAG
-
+          image: us-central1-docker.pkg.dev/project-1-501612/demo/frontend:4ac6d3c7f7606dbb295df0f55d854a240de21e51
+          
           imagePullPolicy: Always
 
           ports:
