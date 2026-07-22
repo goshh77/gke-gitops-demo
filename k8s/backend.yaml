@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: my-backend
   namespace: project-dev
@@ -22,7 +23,10 @@ spec:
     spec:
       containers:
         - name: backend
+
           image: us-central1-docker.pkg.dev/project-1-501612/demo/backend:IMAGE_TAG
+
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 5000
